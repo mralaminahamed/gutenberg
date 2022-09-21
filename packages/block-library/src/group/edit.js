@@ -69,7 +69,7 @@ function GroupEditControls( { tagName, onSelectTagName } ) {
 	);
 }
 
-function GroupEdit( { attributes, setAttributes, clientId } ) {
+function GroupEdit( { attributes, name, setAttributes, clientId } ) {
 	const { hasInnerBlocks, themeSupportsLayout } = useSelect(
 		( select ) => {
 			const { getBlock, getSettings } = select( blockEditorStore );
