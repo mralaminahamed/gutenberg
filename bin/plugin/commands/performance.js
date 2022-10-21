@@ -219,7 +219,7 @@ async function runPerformanceTests( branches, options ) {
 
 	await SimpleGit( baseDirectory )
 		.raw( 'init' )
-		.raw( 'remove', 'add', 'origin', options.clonePath )
+		.raw( 'remote', 'add', 'origin', options.clonePath )
 		.raw( 'fetch', '--depth=2', 'origin', options.mergeRef )
 		.raw( 'checkout', options.testsBranch );
 
