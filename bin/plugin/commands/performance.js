@@ -215,12 +215,10 @@ async function runPerformanceTests( branches, options ) {
 	log( '\n>> Preparing the tests directories' );
 	log( '    >> Cloning the repository' );
 	const baseDirectory = getRandomTemporaryPath();
-	runShellScript( 'mkdir -p ' + baseDirectory );
+	fs.mkdirSync( baseDirectory, { recursive: true } );
 
-	await SimpleGit( baseDirectory )
-		.raw( 'init' )
-		.raw( 'remote', 'add', 'origin', options.clonePath )
-		.raw( 'fetch', 'origin' )
+	await SimpleGit()
+		.clone( options.clonePath, baseDirectory )
 		.raw( 'checkout', options.testsBranch );
 
 	const rootDirectory = getRandomTemporaryPath();
