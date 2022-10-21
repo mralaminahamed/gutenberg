@@ -220,7 +220,7 @@ async function runPerformanceTests( branches, options ) {
 	await SimpleGit( baseDirectory )
 		.raw( 'init' )
 		.raw( 'remote', 'add', 'origin', options.clonePath )
-		.raw( 'fetch', '--depth=2', 'origin', options.mergeRef )
+		.raw( 'fetch', 'origin' )
 		.raw( 'checkout', options.testsBranch );
 
 	const rootDirectory = getRandomTemporaryPath();
