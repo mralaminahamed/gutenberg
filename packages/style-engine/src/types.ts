@@ -21,6 +21,14 @@ export interface BorderIndividualStyles< T extends BoxEdge > {
 }
 
 export interface Style {
+	background?: {
+		backgroundImage?:
+			| { url?: CSSProperties[ 'backgroundImage' ]; source?: string }
+			| CSSProperties[ 'backgroundImage' ];
+		backgroundPosition?: CSSProperties[ 'backgroundPosition' ];
+		backgroundRepeat?: CSSProperties[ 'backgroundRepeat' ];
+		backgroundSize?: CSSProperties[ 'backgroundSize' ];
+	};
 	border?: {
 		color?: CSSProperties[ 'borderColor' ];
 		radius?:
@@ -38,6 +46,10 @@ export interface Style {
 		bottom?: BorderIndividualStyles< 'bottom' >;
 		left?: BorderIndividualStyles< 'left' >;
 	};
+	dimensions?: {
+		aspectRatio?: CSSProperties[ 'aspectRatio' ];
+		minHeight?: CSSProperties[ 'minHeight' ];
+	};
 	spacing?: {
 		margin?: CSSProperties[ 'margin' ] | Box< 'margin' >;
 		padding?: CSSProperties[ 'padding' ] | Box< 'padding' >;
@@ -49,8 +61,10 @@ export interface Style {
 		fontStyle?: CSSProperties[ 'fontStyle' ];
 		letterSpacing?: CSSProperties[ 'letterSpacing' ];
 		lineHeight?: CSSProperties[ 'lineHeight' ];
+		textColumns?: CSSProperties[ 'columnCount' ];
 		textDecoration?: CSSProperties[ 'textDecoration' ];
 		textTransform?: CSSProperties[ 'textTransform' ];
+		writingMode?: CSSProperties[ 'writingMode' ];
 	};
 	color?: {
 		text?: CSSProperties[ 'color' ];
@@ -80,7 +94,7 @@ export interface StyleOptions {
 
 export interface GeneratedCSSRule {
 	selector?: string;
-	value: string;
+	value: string | unknown;
 	/**
 	 * The CSS key in JS style attribute format, compatible with React.
 	 * E.g. `paddingTop` instead of `padding-top`.

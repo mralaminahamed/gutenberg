@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 /**
  * WordPress dependencies
@@ -32,7 +32,7 @@ export default function ResponsiveWrapper( {
 		return children;
 	}
 
-	const responsiveContainerClasses = classnames(
+	const responsiveContainerClasses = clsx(
 		'wp-block-navigation__responsive-container',
 		{
 			'has-text-color':
@@ -59,7 +59,7 @@ export default function ResponsiveWrapper( {
 			overlayBackgroundColor.color,
 	};
 
-	const openButtonClasses = classnames(
+	const openButtonClasses = clsx(
 		'wp-block-navigation__responsive-container-open',
 		{ 'always-shown': isHiddenByDefault }
 	);
@@ -79,17 +79,14 @@ export default function ResponsiveWrapper( {
 		<>
 			{ ! isOpen && (
 				<Button
+					__next40pxDefaultSize
 					aria-haspopup="true"
 					aria-label={ hasIcon && __( 'Open menu' ) }
 					className={ openButtonClasses }
 					onClick={ () => onToggle( true ) }
 				>
 					{ hasIcon && <OverlayMenuIcon icon={ icon } /> }
-					{ ! hasIcon && (
-						<span className="wp-block-navigation__toggle_button_label">
-							{ __( 'Menu' ) }
-						</span>
-					) }
+					{ ! hasIcon && __( 'Menu' ) }
 				</Button>
 			) }
 
@@ -104,16 +101,13 @@ export default function ResponsiveWrapper( {
 				>
 					<div { ...dialogProps }>
 						<Button
+							__next40pxDefaultSize
 							className="wp-block-navigation__responsive-container-close"
 							aria-label={ hasIcon && __( 'Close menu' ) }
 							onClick={ () => onToggle( false ) }
 						>
 							{ hasIcon && <Icon icon={ close } /> }
-							{ ! hasIcon && (
-								<span className="wp-block-navigation__toggle_button_label">
-									{ __( 'Close' ) }
-								</span>
-							) }
+							{ ! hasIcon && __( 'Close' ) }
 						</Button>
 						<div
 							className="wp-block-navigation__responsive-container-content"

@@ -44,13 +44,18 @@ If `isDragEnabled` is true, this controls the amount of `px` to have been dragge
 -   Required: No
 -   Default: `10`
 
-### hideHTMLArrows
+### spinControls
 
-If true, the default `input` HTML arrows will be hidden.
+ The type of spin controls to display. These are buttons that allow the user to
+ quickly increment and decrement the number.
 
--   Type: `Boolean`
+ - 'none' - Do not show spin controls.
+ - 'native' - Use browser's native HTML `input` controls.
+ - 'custom' - Use plus and minus icon buttons.
+
+-   Type: `String`
 -   Required: No
--   Default: `false`
+-   Default: `'native'`
 
 ### isDragEnabled
 
@@ -134,3 +139,11 @@ Amount by which the `value` is changed when incrementing/decrementing. It is als
 -   Type: `Number | "any"`
 -   Required: No
 -   Default: `1`
+
+### __next40pxDefaultSize
+
+Start opting into the larger default height that will become the default size in a future version.
+
+-   Type: `Boolean`
+-   Required: No
+-   Default: `false`

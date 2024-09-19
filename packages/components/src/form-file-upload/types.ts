@@ -11,6 +11,12 @@ import type Icon from '../icon';
 // TODO: Replace `children` and `icon` types with props from Button once Button is typed.
 export type FormFileUploadProps = {
 	/**
+	 * Start opting into the larger default height that will become the default size in a future version.
+	 *
+	 * @default false
+	 */
+	__next40pxDefaultSize?: boolean;
+	/**
 	 * A string passed to `input` element that tells the browser which file types can be
 	 * upload to the upload by the user use. e.g: `image/*,video/*`.
 	 *
@@ -55,9 +61,10 @@ export type FormFileUploadProps = {
 	/**
 	 * Optional callback function used to render the UI.
 	 *
-	 * If passed, the component does not render any UI and calls this function to render it.
-	 * This function receives an object with the property `openFileDialog`.
-	 * The property is a function that when called opens the browser window to upload files.
+	 * If passed, the component does not render the default UI (a button) and
+	 * calls this function to render it. The function receives an object with
+	 * property `openFileDialog`, a function that, when called, opens the browser
+	 * native file upload modal window.
 	 */
-	render?: ( arg: { openFileDialog: () => void } ) => void;
+	render?: ( arg: { openFileDialog: () => void } ) => ReactNode;
 };

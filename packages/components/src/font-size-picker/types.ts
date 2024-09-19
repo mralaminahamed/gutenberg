@@ -1,8 +1,3 @@
-/**
- * External dependencies
- */
-import type { ReactNode } from 'react';
-
 export type FontSizePickerProps = {
 	/**
 	 * If `true`, it will not be possible to choose a custom fontSize. The user
@@ -27,14 +22,24 @@ export type FontSizePickerProps = {
 	 * attending to what reset means in that context, e.g., set the font size to
 	 * undefined or set the font size a starting value.
 	 */
-	onChange?: ( value: number | string | undefined ) => void;
+	onChange?: (
+		value: number | string | undefined,
+		selectedItem?: FontSize
+	) => void;
+	/**
+	 * Available units for custom font size selection.
+	 *
+	 * @default [ 'px', 'em', 'rem', 'vw', 'vh' ]
+	 */
+	units?: string[];
 	/**
 	 * The current font size value.
 	 */
 	value?: number | string;
 	/**
-	 * If `true`, the UI will contain a slider, instead of a numeric text input
-	 * field. If `false`, no slider will be present.
+	 * If `true`, a slider will be displayed alongside the input field when a
+	 * custom font size is active. Has no effect when `disableCustomFontSizes`
+	 * is `true`.
 	 *
 	 * @default false
 	 */
@@ -42,7 +47,7 @@ export type FontSizePickerProps = {
 	/**
 	 * If `true`, a reset button will be displayed alongside the input field
 	 * when a custom font size is active. Has no effect when
-	 * `disableCustomFontSizes` or `withSlider` is `true`.
+	 * `disableCustomFontSizes` is `true`.
 	 *
 	 * @default true
 	 */
@@ -53,12 +58,20 @@ export type FontSizePickerProps = {
 	 * can be safely removed once this happens.)
 	 *
 	 * @default false
+	 * @deprecated Default behavior since WP 6.5. Prop can be safely removed.
+	 * @ignore
 	 */
 	__nextHasNoMarginBottom?: boolean;
 	/**
+	 * Start opting into the larger default height that will become the default size in a future version.
+	 *
+	 * @default false
+	 */
+	__next40pxDefaultSize?: boolean;
+	/**
 	 * Size of the control.
 	 *
-	 * @default default
+	 * @default 'default'
 	 */
 	size?: 'default' | '__unstable-large';
 };
@@ -81,18 +94,30 @@ export type FontSize = {
 	slug: string;
 };
 
-export type FontSizeOption = Omit< FontSize, 'size' > &
-	Partial< Pick< FontSize, 'size' > >;
-
-export type FontSizeSelectOption = Pick< FontSizeOption, 'size' > & {
-	key: string;
-	name?: string;
-	__experimentalHint: ReactNode;
+export type FontSizePickerSelectProps = Pick<
+	FontSizePickerProps,
+	'value' | 'size'
+> & {
+	fontSizes: NonNullable< FontSizePickerProps[ 'fontSizes' ] >;
+	disableCustomFontSizes: NonNullable<
+		FontSizePickerProps[ 'disableCustomFontSizes' ]
+	>;
+	onChange: NonNullable< FontSizePickerProps[ 'onChange' ] >;
+	onSelectCustom: () => void;
+	__next40pxDefaultSize: boolean;
 };
 
-export type FontSizeToggleGroupOption = {
+export type FontSizePickerSelectOption = {
 	key: string;
-	value: number | string;
-	label: string;
 	name: string;
+	value?: FontSize[ 'size' ];
+	hint?: string;
+};
+
+export type FontSizePickerToggleGroupProps = Pick<
+	FontSizePickerProps,
+	'value' | 'size' | '__next40pxDefaultSize'
+> & {
+	fontSizes: NonNullable< FontSizePickerProps[ 'fontSizes' ] >;
+	onChange: NonNullable< FontSizePickerProps[ 'onChange' ] >;
 };

@@ -20,6 +20,11 @@ import { store as editorStore } from '../../store';
  */
 const AVERAGE_READING_RATE = 189;
 
+/**
+ * Component for showing Time To Read in Content.
+ *
+ * @return {JSX.Element} The rendered TimeToRead component.
+ */
 export default function TimeToRead() {
 	const content = useSelect(
 		( select ) => select( editorStore ).getEditedPostAttribute( 'content' ),
@@ -38,7 +43,7 @@ export default function TimeToRead() {
 	const minutesToReadString =
 		minutesToRead === 0
 			? createInterpolateElement( __( '<span>< 1</span> minute' ), {
-					span: <span className="table-of-contents__number" />,
+					span: <span />,
 			  } )
 			: createInterpolateElement(
 					sprintf(
@@ -51,7 +56,7 @@ export default function TimeToRead() {
 						minutesToRead
 					),
 					{
-						span: <span className="table-of-contents__number" />,
+						span: <span />,
 					}
 			  );
 

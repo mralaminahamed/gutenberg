@@ -4,44 +4,35 @@
 import styled from '@emotion/styled';
 
 /**
- * WordPress dependencies
- */
-import { Path, SVG } from '@wordpress/primitives';
-
-/**
  * Internal dependencies
  */
-import { COLORS } from '../../utils';
+import { CONFIG } from '../../utils';
 
-export const FocalPointWrapper = styled.div`
+export const PointerCircle = styled.div`
 	background-color: transparent;
 	cursor: grab;
-	height: 30px;
-	margin: -15px 0 0 -15px;
-	opacity: 0.8;
+	height: 40px;
+	margin: -20px 0 0 -20px;
 	position: absolute;
 	user-select: none;
-	width: 30px;
+	width: 40px;
 	will-change: transform;
 	z-index: 10000;
+	background: rgba( 255, 255, 255, 0.4 );
+	border: 1px solid rgba( 255, 255, 255, 0.4 );
+	border-radius: ${ CONFIG.radiusRound };
+	backdrop-filter: blur( 16px ) saturate( 180% );
+	box-shadow: rgb( 0 0 0 / 10% ) 0px 0px 8px;
+
+	@media not ( prefers-reduced-motion ) {
+		transition: transform 100ms linear;
+	}
 
 	${ ( { isDragging }: { isDragging: boolean } ) =>
-		isDragging && 'cursor: grabbing;' }
-`;
-
-export const PointerIconSVG = styled( SVG )`
-	display: block;
-	height: 100%;
-	left: 0;
-	position: absolute;
-	top: 0;
-	width: 100%;
-`;
-
-export const PointerIconPathOutline = styled( Path )`
-	fill: white;
-`;
-
-export const PointerIconPathFill = styled( Path )`
-	fill: ${ COLORS.ui.theme };
+		isDragging &&
+		`
+			box-shadow: rgb( 0 0 0 / 12% ) 0px 0px 10px;
+			transform: scale( 1.1 );
+			cursor: grabbing;
+			` }
 `;

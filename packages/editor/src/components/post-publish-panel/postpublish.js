@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import { get } from 'lodash';
-
-/**
  * WordPress dependencies
  */
 import { PanelBody, Button, TextControl } from '@wordpress/components';
@@ -22,6 +17,7 @@ import PostScheduleLabel from '../post-schedule/label';
 import { store as editorStore } from '../../store';
 
 const POSTNAME = '%postname%';
+const PAGENAME = '%pagename%';
 
 /**
  * Returns URL for a future post.
@@ -38,13 +34,17 @@ const getFuturePostUrl = ( post ) => {
 		return post.permalink_template.replace( POSTNAME, slug );
 	}
 
+	if ( post.permalink_template.includes( PAGENAME ) ) {
+		return post.permalink_template.replace( PAGENAME, slug );
+	}
+
 	return post.permalink_template;
 };
 
 function CopyButton( { text, onCopy, children } ) {
 	const ref = useCopyToClipboard( text, onCopy );
 	return (
-		<Button variant="secondary" ref={ ref }>
+		<Button __next40pxDefaultSize variant="secondary" ref={ ref }>
 			{ children }
 		</Button>
 	);
@@ -90,9 +90,9 @@ class PostPublishPanelPostpublish extends Component {
 
 	render() {
 		const { children, isScheduled, post, postType } = this.props;
-		const postLabel = get( postType, [ 'labels', 'singular_name' ] );
-		const viewPostLabel = get( postType, [ 'labels', 'view_item' ] );
-		const addNewPostLabel = get( postType, [ 'labels', 'add_new_item' ] );
+		const postLabel = postType?.labels?.singular_name;
+		const viewPostLabel = postType?.labels?.view_item;
+		const addNewPostLabel = postType?.labels?.add_new_item;
 		const link =
 			post.status === 'future' ? getFuturePostUrl( post ) : post.link;
 		const addLink = addQueryArgs( 'post-new.php', {
@@ -122,6 +122,8 @@ class PostPublishPanelPostpublish extends Component {
 					</p>
 					<div className="post-publish-panel__postpublish-post-address-container">
 						<TextControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 							className="post-publish-panel__postpublish-post-address"
 							readOnly
 							label={ sprintf(
@@ -144,12 +146,17 @@ class PostPublishPanelPostpublish extends Component {
 
 					<div className="post-publish-panel__postpublish-buttons">
 						{ ! isScheduled && (
-							<Button variant="primary" href={ link }>
+							<Button
+								variant="primary"
+								href={ link }
+								__next40pxDefaultSize
+							>
 								{ viewPostLabel }
 							</Button>
 						) }
 						<Button
 							variant={ isScheduled ? 'primary' : 'secondary' }
+							__next40pxDefaultSize
 							href={ addLink }
 						>
 							{ addNewPostLabel }

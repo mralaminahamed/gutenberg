@@ -16,7 +16,8 @@ import {
 	isCompleteBorder,
 	isEmptyBorder,
 } from '../utils';
-import { useContextSystem, WordPressComponentProps } from '../../ui/context';
+import type { WordPressComponentProps } from '../../context';
+import { useContextSystem } from '../../context';
 import { useCx } from '../../utils/hooks/use-cx';
 
 import type { Border } from '../../border-control/types';
@@ -25,10 +26,21 @@ import type { Borders, BorderSide, BorderBoxControlProps } from '../types';
 export function useBorderBoxControl(
 	props: WordPressComponentProps< BorderBoxControlProps, 'div' >
 ) {
-	const { className, onChange, value, ...otherProps } = useContextSystem(
-		props,
-		'BorderBoxControl'
-	);
+	const {
+		className,
+		colors = [],
+		onChange,
+		enableAlpha = false,
+		enableStyle = true,
+		size = 'default',
+		value,
+		__experimentalIsRenderedInSidebar = false,
+		__next40pxDefaultSize,
+		...otherProps
+	} = useContextSystem( props, 'BorderBoxControl' );
+
+	const computedSize =
+		size === 'default' && __next40pxDefaultSize ? '__unstable-large' : size;
 
 	const mixedBorders = hasMixedBorders( value );
 	const splitBorders = hasSplitBorders( value );
@@ -100,17 +112,24 @@ export function useBorderBoxControl(
 
 	const cx = useCx();
 	const classes = useMemo( () => {
-		return cx( styles.BorderBoxControl, className );
+		return cx( styles.borderBoxControl, className );
 	}, [ cx, className ] );
 
 	const linkedControlClassName = useMemo( () => {
-		return cx( styles.LinkedBorderControl );
+		return cx( styles.linkedBorderControl() );
+	}, [ cx ] );
+
+	const wrapperClassName = useMemo( () => {
+		return cx( styles.wrapper );
 	}, [ cx ] );
 
 	return {
 		...otherProps,
 		className: classes,
+		colors,
 		disableUnits: mixedBorders && ! hasWidthValue,
+		enableAlpha,
+		enableStyle,
 		hasMixedBorders: mixedBorders,
 		isLinked,
 		linkedControlClassName,
@@ -118,6 +137,9 @@ export function useBorderBoxControl(
 		onSplitChange,
 		toggleLinked,
 		linkedValue,
+		size: computedSize,
 		splitValue,
+		wrapperClassName,
+		__experimentalIsRenderedInSidebar,
 	};
 }

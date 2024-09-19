@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 /**
  * WordPress dependencies
@@ -50,6 +50,20 @@ const migrateBorderRadius = ( attributes ) => {
 		},
 	};
 };
+
+function migrateAlign( attributes ) {
+	if ( ! attributes.align ) {
+		return attributes;
+	}
+	const { align, ...otherAttributes } = attributes;
+	return {
+		...otherAttributes,
+		className: clsx(
+			otherAttributes.className,
+			`align${ attributes.align }`
+		),
+	};
+}
 
 const migrateCustomColorsAndGradients = ( attributes ) => {
 	if (
@@ -212,7 +226,7 @@ const v11 = {
 		const borderProps = getBorderClassesAndStyles( attributes );
 		const colorProps = getColorClassesAndStyles( attributes );
 		const spacingProps = getSpacingClassesAndStyles( attributes );
-		const buttonClasses = classnames(
+		const buttonClasses = clsx(
 			'wp-block-button__link',
 			colorProps.className,
 			borderProps.className,
@@ -232,7 +246,7 @@ const v11 = {
 		// if it had already been assigned, for the sake of backward-compatibility.
 		// A title will no longer be assigned for new or updated button block links.
 
-		const wrapperClasses = classnames( className, {
+		const wrapperClasses = clsx( className, {
 			[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 			[ `has-custom-font-size` ]: fontSize || style?.typography?.fontSize,
 		} );
@@ -338,7 +352,7 @@ const v10 = {
 		const borderProps = getBorderClassesAndStyles( attributes );
 		const colorProps = getColorClassesAndStyles( attributes );
 		const spacingProps = getSpacingClassesAndStyles( attributes );
-		const buttonClasses = classnames(
+		const buttonClasses = clsx(
 			'wp-block-button__link',
 			colorProps.className,
 			borderProps.className,
@@ -358,7 +372,7 @@ const v10 = {
 		// if it had already been assigned, for the sake of backward-compatibility.
 		// A title will no longer be assigned for new or updated button block links.
 
-		const wrapperClasses = classnames( className, {
+		const wrapperClasses = clsx( className, {
 			[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 			[ `has-custom-font-size` ]: fontSize || style?.typography?.fontSize,
 		} );
@@ -454,7 +468,7 @@ const deprecated = [
 
 			const borderRadius = style?.border?.radius;
 			const colorProps = getColorClassesAndStyles( attributes );
-			const buttonClasses = classnames(
+			const buttonClasses = clsx(
 				'wp-block-button__link',
 				colorProps.className,
 				{
@@ -470,7 +484,7 @@ const deprecated = [
 			// if it had already been assigned, for the sake of backward-compatibility.
 			// A title will no longer be assigned for new or updated button block links.
 
-			const wrapperClasses = classnames( className, {
+			const wrapperClasses = clsx( className, {
 				[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 				[ `has-custom-font-size` ]:
 					fontSize || style?.typography?.fontSize,
@@ -544,7 +558,7 @@ const deprecated = [
 			const { borderRadius, linkTarget, rel, text, title, url, width } =
 				attributes;
 			const colorProps = getColorClassesAndStyles( attributes );
-			const buttonClasses = classnames(
+			const buttonClasses = clsx(
 				'wp-block-button__link',
 				colorProps.className,
 				{
@@ -560,7 +574,7 @@ const deprecated = [
 			// if it had already been assigned, for the sake of backward-compatibility.
 			// A title will no longer be assigned for new or updated button block links.
 
-			const wrapperClasses = classnames( className, {
+			const wrapperClasses = clsx( className, {
 				[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 			} );
 
@@ -632,7 +646,7 @@ const deprecated = [
 			const { borderRadius, linkTarget, rel, text, title, url, width } =
 				attributes;
 			const colorProps = getColorClassesAndStyles( attributes );
-			const buttonClasses = classnames(
+			const buttonClasses = clsx(
 				'wp-block-button__link',
 				colorProps.className,
 				{
@@ -648,7 +662,7 @@ const deprecated = [
 			// if it had already been assigned, for the sake of backward-compatibility.
 			// A title will no longer be assigned for new or updated button block links.
 
-			const wrapperClasses = classnames( className, {
+			const wrapperClasses = clsx( className, {
 				[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 			} );
 
@@ -711,7 +725,7 @@ const deprecated = [
 		save( { attributes } ) {
 			const { borderRadius, linkTarget, rel, text, title, url } =
 				attributes;
-			const buttonClasses = classnames( 'wp-block-button__link', {
+			const buttonClasses = clsx( 'wp-block-button__link', {
 				'no-border-radius': borderRadius === 0,
 			} );
 			const buttonStyle = {
@@ -780,10 +794,12 @@ const deprecated = [
 		isEligible: ( attributes ) =>
 			!! attributes.customTextColor ||
 			!! attributes.customBackgroundColor ||
-			!! attributes.customGradient,
+			!! attributes.customGradient ||
+			!! attributes.align,
 		migrate: compose(
 			migrateBorderRadius,
-			migrateCustomColorsAndGradients
+			migrateCustomColorsAndGradients,
+			migrateAlign
 		),
 		save( { attributes } ) {
 			const {
@@ -807,7 +823,7 @@ const deprecated = [
 				getColorClassName( 'background-color', backgroundColor );
 			const gradientClass = __experimentalGetGradientClass( gradient );
 
-			const buttonClasses = classnames( 'wp-block-button__link', {
+			const buttonClasses = clsx( 'wp-block-button__link', {
 				'has-text-color': textColor || customTextColor,
 				[ textClass ]: textClass,
 				'has-background':
@@ -925,7 +941,7 @@ const deprecated = [
 				backgroundColor
 			);
 
-			const buttonClasses = classnames( 'wp-block-button__link', {
+			const buttonClasses = clsx( 'wp-block-button__link', {
 				'has-text-color': textColor || customTextColor,
 				[ textClass ]: textClass,
 				'has-background': backgroundColor || customBackgroundColor,
@@ -993,7 +1009,7 @@ const deprecated = [
 				backgroundColor
 			);
 
-			const buttonClasses = classnames( 'wp-block-button__link', {
+			const buttonClasses = clsx( 'wp-block-button__link', {
 				'has-text-color': textColor || customTextColor,
 				[ textClass ]: textClass,
 				'has-background': backgroundColor || customBackgroundColor,

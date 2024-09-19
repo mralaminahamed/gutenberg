@@ -6,7 +6,7 @@ const getAssociatedPullRequest = require( '../../get-associated-pull-request' );
 const hasWordPressProfile = require( '../../has-wordpress-profile' );
 
 /** @typedef {ReturnType<import('@actions/github').getOctokit>} GitHub */
-/** @typedef {import('@octokit/webhooks').WebhookPayloadPush} WebhookPayloadPush */
+/** @typedef {import('@octokit/webhooks-types').EventPayloadMap['push']} WebhookPayloadPush */
 /** @typedef {import('../../get-associated-pull-request').WebhookPayloadPushCommit} WebhookPayloadPushCommit */
 
 /**
@@ -34,7 +34,7 @@ function getPromptMessageText( author ) {
 
 /**
  * Prompts the user to link their GitHub account to their WordPress.org profile
- * if neccessary for props credit.
+ * if necessary for props credit.
  *
  * @param {WebhookPayloadPush} payload Push event payload.
  * @param {GitHub}             octokit Initialized Octokit REST client.

@@ -54,6 +54,9 @@ describe( 'generate', () => {
 						gradient:
 							'linear-gradient(135deg,rgb(255,203,112) 0%,rgb(33,32,33) 42%,rgb(65,88,208) 100%)',
 					},
+					dimensions: {
+						minHeight: '50vh',
+					},
 					spacing: {
 						padding: { top: '10px', bottom: '5px' },
 						margin: {
@@ -69,6 +72,7 @@ describe( 'generate', () => {
 						fontWeight: '800',
 						fontFamily: "'Helvetica Neue',sans-serif",
 						lineHeight: '3.3',
+						textColumns: '2',
 						textDecoration: 'line-through',
 						letterSpacing: '12px',
 						textTransform: 'uppercase',
@@ -85,7 +89,7 @@ describe( 'generate', () => {
 				}
 			)
 		).toEqual(
-			".some-selector { color: #cccccc; background: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(33,32,33) 42%,rgb(65,88,208) 100%); background-color: #111111; outline-color: red; outline-style: dashed; outline-offset: 2px; outline-width: 4px; margin-top: 11px; margin-right: 12px; margin-bottom: 13px; margin-left: 14px; padding-top: 10px; padding-bottom: 5px; font-family: 'Helvetica Neue',sans-serif; font-size: 2.2rem; font-style: italic; font-weight: 800; letter-spacing: 12px; line-height: 3.3; text-decoration: line-through; text-transform: uppercase; }"
+			".some-selector { color: #cccccc; background: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(33,32,33) 42%,rgb(65,88,208) 100%); background-color: #111111; min-height: 50vh; outline-color: red; outline-style: dashed; outline-offset: 2px; outline-width: 4px; margin-top: 11px; margin-right: 12px; margin-bottom: 13px; margin-left: 14px; padding-top: 10px; padding-bottom: 5px; font-family: 'Helvetica Neue',sans-serif; font-size: 2.2rem; font-style: italic; font-weight: 800; letter-spacing: 12px; line-height: 3.3; column-count: 2; text-decoration: line-through; text-transform: uppercase; }"
 		);
 	} );
 
@@ -220,11 +224,23 @@ describe( 'getCSSRules', () => {
 		expect(
 			getCSSRules(
 				{
+					background: {
+						backgroundImage: {
+							url: 'https://example.com/image.jpg',
+						},
+						backgroundPosition: '50% 50%',
+						backgroundRepeat: 'no-repeat',
+						backgroundSize: '300px',
+						backgroundAttachment: 'fixed',
+					},
 					color: {
 						text: '#dddddd',
 						background: '#555555',
 						gradient:
 							'linear-gradient(135deg,rgb(255,203,112) 0%,rgb(33,32,33) 42%,rgb(65,88,208) 100%)',
+					},
+					dimensions: {
+						minHeight: '50vh',
 					},
 					spacing: {
 						padding: { top: '10px', bottom: '5px' },
@@ -236,6 +252,7 @@ describe( 'getCSSRules', () => {
 						fontWeight: '800',
 						fontFamily: "'Helvetica Neue',sans-serif",
 						lineHeight: '3.3',
+						textColumns: '2',
 						textDecoration: 'line-through',
 						letterSpacing: '12px',
 						textTransform: 'uppercase',
@@ -267,6 +284,11 @@ describe( 'getCSSRules', () => {
 				selector: '.some-selector',
 				key: 'backgroundColor',
 				value: '#555555',
+			},
+			{
+				selector: '.some-selector',
+				key: 'minHeight',
+				value: '50vh',
 			},
 			{
 				selector: '.some-selector',
@@ -340,6 +362,11 @@ describe( 'getCSSRules', () => {
 			},
 			{
 				selector: '.some-selector',
+				key: 'columnCount',
+				value: '2',
+			},
+			{
+				selector: '.some-selector',
 				key: 'textDecoration',
 				value: 'line-through',
 			},
@@ -352,6 +379,31 @@ describe( 'getCSSRules', () => {
 				selector: '.some-selector',
 				key: 'boxShadow',
 				value: '10px 10px red',
+			},
+			{
+				selector: '.some-selector',
+				key: 'backgroundImage',
+				value: "url( 'https://example.com/image.jpg' )",
+			},
+			{
+				selector: '.some-selector',
+				key: 'backgroundPosition',
+				value: '50% 50%',
+			},
+			{
+				selector: '.some-selector',
+				key: 'backgroundRepeat',
+				value: 'no-repeat',
+			},
+			{
+				selector: '.some-selector',
+				key: 'backgroundSize',
+				value: '300px',
+			},
+			{
+				selector: '.some-selector',
+				key: 'backgroundAttachment',
+				value: 'fixed',
 			},
 		] );
 	} );
@@ -379,6 +431,28 @@ describe( 'getCSSRules', () => {
 				selector: '.some-selector a',
 				key: 'padding',
 				value: '11px',
+			},
+		] );
+	} );
+
+	it( 'should output background image value when that value is a string', () => {
+		expect(
+			getCSSRules(
+				{
+					background: {
+						backgroundImage:
+							"linear-gradient(to bottom,rgb(255 255 0 / 50%),rgb(0 0 255 / 50%), url('https://example.com/image.jpg')",
+					},
+				},
+				{
+					selector: '.some-selector',
+				}
+			)
+		).toEqual( [
+			{
+				selector: '.some-selector',
+				key: 'backgroundImage',
+				value: "linear-gradient(to bottom,rgb(255 255 0 / 50%),rgb(0 0 255 / 50%), url('https://example.com/image.jpg')",
 			},
 		] );
 	} );

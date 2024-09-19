@@ -43,6 +43,8 @@ export default function WelcomeGuide( { sidebar } ) {
 					  ) }
 			</p>
 			<Button
+				// TODO: Switch to `true` (40px size) if possible
+				__next40pxDefaultSize={ false }
 				className="customize-widgets-welcome-guide__button"
 				variant="primary"
 				onClick={ () =>
@@ -70,7 +72,7 @@ export default function WelcomeGuide( { sidebar } ) {
 				<br />
 				<ExternalLink
 					href={ __(
-						'https://wordpress.org/support/article/wordpress-editor/'
+						'https://wordpress.org/documentation/article/wordpress-block-editor/'
 					) }
 				>
 					{ __( "Here's a detailed guide." ) }

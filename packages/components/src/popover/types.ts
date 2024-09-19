@@ -12,10 +12,7 @@ type DomRectWithOwnerDocument = DOMRect & {
 	ownerDocument?: Document;
 };
 
-export type AnimatedWrapperProps = {
-	placement: Placement;
-	shouldAnimate?: boolean;
-};
+type PopoverPlacement = Placement | 'overlay';
 
 export type PopoverAnchorRefReference = MutableRefObject<
 	Element | null | undefined
@@ -69,6 +66,15 @@ export type PopoverProps = {
 	 */
 	flip?: boolean;
 	/**
+	 * Determines whether tabbing is constrained to within the popover,
+	 * preventing keyboard focus from leaving the popover content without
+	 * explicit focus elswhere, or whether the popover remains part of the wider
+	 * tab order. If no value is passed, it will be derived from `focusOnMount`.
+	 *
+	 * @default `focusOnMount` !== false
+	 */
+	constrainTabbing?: boolean;
+	/**
 	 * By default, the _first tabbable element_ in the popover will receive focus
 	 * when it mounts. This is the same as setting this prop to `"firstElement"`.
 	 * Specifying a `false` value disables the focus handling entirely (this
@@ -93,10 +99,6 @@ export type PopoverProps = {
 	 */
 	headerTitle?: string;
 	/**
-	 * Used to enable a different visual style for the popover.
-	 */
-	isAlternate?: boolean;
-	/**
 	 * Used to show/hide the arrow that points at the popover's anchor.
 	 *
 	 * @default true
@@ -115,7 +117,7 @@ export type PopoverProps = {
 	 *
 	 * @default 'bottom-start'
 	 */
-	placement?: Placement;
+	placement?: PopoverPlacement;
 	/**
 	 * Legacy way to specify the popover's position with respect to its anchor.
 	 * _Note: this prop is deprecated. Use the `placement` prop instead._
@@ -138,7 +140,26 @@ export type PopoverProps = {
 	 * @default false
 	 */
 	shift?: boolean;
-
+	/**
+	 * Specifies the popover's style.
+	 *
+	 * Leave undefined for the default style. Other values are:
+	 * - 'unstyled':  The popover is essentially without any visible style, it
+	 *                has no background, border, outline or drop shadow, but
+	 *                the popover contents are still displayed.
+	 * - 'toolbar':   A style that has no elevation, but a high contrast with
+	 *                other elements. This is matches the style of the
+	 *                `Toolbar` component.
+	 *
+	 * @default undefined
+	 */
+	variant?: 'unstyled' | 'toolbar';
+	/**
+	 * Whether to render the popover inline or within the slot.
+	 *
+	 * @default false
+	 */
+	inline?: boolean;
 	// Deprecated props
 	/**
 	 * Prevent the popover from flipping and resizing when meeting the viewport
@@ -148,14 +169,6 @@ export type PopoverProps = {
 	 * @deprecated
 	 */
 	__unstableForcePosition?: boolean;
-	/**
-	 * Enables the `Popover` to shift in order to stay in view when meeting the
-	 * viewport edges.
-	 * _Note: this prop is deprecated. Use the `shift` prop instead._
-	 *
-	 * @deprecated
-	 */
-	__unstableShift?: boolean;
 	/**
 	 * An object extending a `DOMRect` with an additional optional `ownerDocument`
 	 * property, used to specify a fixed popover position.
@@ -185,9 +198,11 @@ export type PopoverProps = {
 		fallbackReferenceElement: Element | null
 	) => DomRectWithOwnerDocument;
 	/**
-	 * _Note: this prop is deprecated and has no effect on the component._
+	 * Used to enable a different visual style for the popover.
+	 * _Note: this prop is deprecated. Use the `variant` prop with the
+	 * 'toolbar' value instead._
 	 *
 	 * @deprecated
 	 */
-	range?: unknown;
+	isAlternate?: boolean;
 };

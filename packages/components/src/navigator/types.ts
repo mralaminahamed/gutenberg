@@ -3,25 +3,88 @@
  */
 import type { ReactNode } from 'react';
 
-type NavigateOptions = {
+/**
+ * Internal dependencies
+ */
+import type { ButtonAsButtonProps } from '../button/types';
+
+export type MatchParams = Record< string, string | string[] >;
+
+export type NavigateOptions = {
+	/**
+	 * Specify the CSS selector used to restore focus on an given element when
+	 * navigating back. When not provided, the component will attempt to restore
+	 * focus on the element that originated the forward navigation.
+	 */
 	focusTargetSelector?: string;
+	/**
+	 * Whether the navigation is a backwards navigation. This enables focus
+	 * restoration (when possible), and causes the animation to be backwards.
+	 */
+	isBack?: boolean;
+	/**
+	 * Opt out of focus management. Useful when the consumer of the component
+	 * wants to manage focus themselves.
+	 */
+	skipFocus?: boolean;
+	/**
+	 * Note: this option is deprecated and currently doesn't have any effect.
+	 * @deprecated
+	 * @ignore
+	 */
+	replace?: boolean;
 };
 
+export type NavigateToParentOptions = Omit< NavigateOptions, 'isBack' >;
+
 export type NavigatorLocation = NavigateOptions & {
+	/**
+	 * Whether the current location is the initial one (ie. first in the stack).
+	 */
 	isInitial?: boolean;
-	isBack?: boolean;
+	/**
+	 * The path associated to the location.
+	 */
 	path?: string;
+	/**
+	 * Whether focus was already restored for this location (in case of
+	 * backwards navigation).
+	 */
 	hasRestoredFocus?: boolean;
 };
 
-export type NavigatorContext = {
+// Returned by the `useNavigator` hook.
+export type Navigator = {
+	/**
+	 * The current location.
+	 */
 	location: NavigatorLocation;
+	/**
+	 * Params associated with the current location
+	 */
+	params: MatchParams;
+	/**
+	 * Navigate to a new location.
+	 */
 	goTo: ( path: string, options?: NavigateOptions ) => void;
-	goBack: () => void;
+	/**
+	 * Go back to the parent location (ie. "/some/path" will navigate back
+	 * to "/some")
+	 */
+	goBack: ( options?: NavigateToParentOptions ) => void;
+	/**
+	 * _Note: This function is deprecated. Please use `goBack` instead._
+	 * @deprecated
+	 * @ignore
+	 */
+	goToParent: ( options?: NavigateToParentOptions ) => void;
 };
 
-// Returned by the `useNavigator` hook.
-export type Navigator = NavigatorContext;
+export type NavigatorContext = Navigator & {
+	addScreen: ( screen: Screen ) => void;
+	removeScreen: ( screen: Screen ) => void;
+	match?: string;
+};
 
 export type NavigatorProviderProps = {
 	/**
@@ -45,17 +108,9 @@ export type NavigatorScreenProps = {
 	children: ReactNode;
 };
 
-type ButtonProps = {
-	// TODO: should also extend `Button` prop types once the `Button` component
-	// is refactored to TypeScript.
-	variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
-};
-export type NavigatorBackButtonProps = Omit< ButtonProps, 'href' > & {
-	/**
-	 * The children elements.
-	 */
-	children: ReactNode;
-};
+export type NavigatorBackButtonProps = ButtonAsButtonProps;
+
+export type NavigatorToParentButtonProps = NavigatorBackButtonProps;
 
 export type NavigatorButtonProps = NavigatorBackButtonProps & {
 	/**
@@ -70,4 +125,9 @@ export type NavigatorButtonProps = NavigatorBackButtonProps & {
 	 * @default 'id'
 	 */
 	attributeName?: string;
+};
+
+export type Screen = {
+	id: string;
+	path: string;
 };

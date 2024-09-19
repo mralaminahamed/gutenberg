@@ -9,6 +9,7 @@
 /**
  * Tests for registering, storing and generating CSS rules.
  *
+ * @group style-engine
  * @coversDefaultClass WP_Style_Engine_CSS_Rule_Gutenberg
  */
 class WP_Style_Engine_CSS_Rule_Test extends WP_UnitTestCase {
@@ -31,6 +32,22 @@ class WP_Style_Engine_CSS_Rule_Test extends WP_UnitTestCase {
 		$expected = "$selector{{$css_declarations->get_declarations_string()}}";
 
 		$this->assertSame( $expected, $css_rule->get_css(), 'Value returned by get_css() does not match expected declarations string.' );
+	}
+
+	/**
+	 * Tests setting and getting a rules group.
+	 *
+	 * @covers ::set_rules_group
+	 * @covers ::get_rules_group
+	 */
+	public function test_should_set_rules_group() {
+		$rule = new WP_Style_Engine_CSS_Rule_Gutenberg( '.heres-johnny', array(), '@layer state' );
+
+		$this->assertSame( '@layer state', $rule->get_rules_group(), 'Return value of get_rules_group() does not match value passed to constructor.' );
+
+		$rule->set_rules_group( '@layer pony' );
+
+		$this->assertSame( '@layer pony', $rule->get_rules_group(), 'Return value of get_rules_group() does not match value passed to set_rules_group().' );
 	}
 
 	/**
@@ -140,5 +157,32 @@ class WP_Style_Engine_CSS_Rule_Test extends WP_UnitTestCase {
 }';
 
 		$this->assertSame( $expected, $css_rule->get_css( true ) );
+	}
+
+	/**
+	 * Tests that a string of multiple selectors is trimmed.
+	 *
+	 * @covers ::get_css
+	 */
+	public function test_should_trim_multiple_selectors() {
+		$selector           = '.poirot, .poirot:active, #miss-marple > .st-mary-mead ';
+		$input_declarations = array(
+			'margin-left' => '0',
+			'font-family' => 'Detective Sans',
+		);
+		$css_declarations   = new WP_Style_Engine_CSS_Declarations_Gutenberg( $input_declarations );
+		$css_rule           = new WP_Style_Engine_CSS_Rule_Gutenberg( $selector, $css_declarations );
+		$expected           = '.poirot, .poirot:active, #miss-marple > .st-mary-mead {margin-left:0;font-family:Detective Sans;}';
+
+		$this->assertSame( $expected, $css_rule->get_css(), 'Return value should be not prettified.' );
+
+		$expected_prettified = '.poirot,
+.poirot:active,
+#miss-marple > .st-mary-mead {
+	margin-left: 0;
+	font-family: Detective Sans;
+}';
+
+		$this->assertSame( $expected_prettified, $css_rule->get_css( true ), 'Return value should be prettified with new lines and indents.' );
 	}
 }

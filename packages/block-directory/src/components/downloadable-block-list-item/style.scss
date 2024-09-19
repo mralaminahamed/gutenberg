@@ -6,8 +6,14 @@
 	display: grid;
 	grid-template-columns: auto 1fr;
 
+	// The item contains absolutely positioned items.
+	// Set `position: relative` on the parent to prevent overflow issues
+	// in scroll containers.
+	// See: https://github.com/WordPress/gutenberg/issues/63384
+	position: relative;
+
 	&:hover {
-		box-shadow: 0 0 0 $border-width-focus var(--wp-admin-theme-color);
+		@include button-style__focus();
 	}
 
 	&.is-busy {

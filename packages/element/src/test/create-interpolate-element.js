@@ -80,7 +80,7 @@ describe( 'createInterpolateElement', () => {
 		);
 		const component = createInterpolateElement( testString, {
 			// eslint-disable-next-line jsx-a11y/anchor-has-content
-			a: <a href={ 'https://github.com' } className={ 'some_class' } />,
+			a: <a href="https://github.com" className="some_class" />,
 		} );
 		expect( JSON.stringify( component ) ).toEqual(
 			JSON.stringify( expectedElement )
@@ -209,15 +209,13 @@ describe( 'createInterpolateElement', () => {
 		};
 		const { container, rerender } = render( <TestComponent switchKey /> );
 
-		expect( container.firstChild ).toContainHTML( '<em>string!</em>' );
-		expect( container.firstChild ).not.toContainHTML( '<strong>' );
+		expect( container ).toContainHTML( '<em>string!</em>' );
+		expect( container ).not.toContainHTML( '<strong>' );
 
 		rerender( <TestComponent switchKey={ false } /> );
 
-		expect( container.firstChild ).toContainHTML(
-			'<strong>string!</strong>'
-		);
-		expect( container.firstChild ).not.toContainHTML( '<em>' );
+		expect( container ).toContainHTML( '<strong>string!</strong>' );
+		expect( container ).not.toContainHTML( '<em>' );
 	} );
 	it( 'handles parsing emojii correctly', () => {
 		const testString = '👳‍♀️<icon>🚨🤷‍♂️⛈️fully</icon> here';
