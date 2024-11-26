@@ -27,6 +27,7 @@ import {
 } from './selectors';
 import {
 	getEntityActions as _getEntityActions,
+	getEntityFields as _getEntityFields,
 	isEntityReady as _isEntityReady,
 } from '../dataviews/store/private-selectors';
 
@@ -37,13 +38,13 @@ const EMPTY_INSERTION_POINT = {
 };
 
 /**
- * Get the insertion point for the inserter.
+ * Get the inserter.
  *
  * @param {Object} state Global application state.
  *
  * @return {Object} The root client ID, index to insert at and starting filter value.
  */
-export const getInsertionPoint = createRegistrySelector( ( select ) =>
+export const getInserter = createRegistrySelector( ( select ) =>
 	createSelector(
 		( state ) => {
 			if ( typeof state.blockInserterPanel === 'object' ) {
@@ -169,6 +170,10 @@ export function getEntityActions( state, ...args ) {
 
 export function isEntityReady( state, ...args ) {
 	return _isEntityReady( state.dataviews, ...args );
+}
+
+export function getEntityFields( state, ...args ) {
+	return _getEntityFields( state.dataviews, ...args );
 }
 
 /**
