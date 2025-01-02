@@ -401,7 +401,7 @@ _Parameters_
 
 -   _props_ `Object`: The component props.
 -   _props.close_ `Function`: The function to close the dialog.
--   _props.renderDialog_ `Function`: The function to render the dialog.
+-   _props.renderDialog_ `boolean`: Whether to render the component with modal dialog behavior.
 
 _Returns_
 
@@ -499,6 +499,7 @@ _Parameters_
 -   _$0.maxUploadFileSize_ `?number`: Maximum upload size in bytes allowed for the site.
 -   _$0.onError_ `Function`: Function called when an error happens.
 -   _$0.onFileChange_ `Function`: Function called each time a file or a temporary representation of the file is available.
+-   _$0.onSuccess_ `Function`: Function called after the final representation of the file is available.
 
 ### MediaUploadCheck
 
@@ -1457,16 +1458,16 @@ _Returns_
 
 ### PostTrashCheck
 
-Wrapper component that renders its children only if the post can trashed.
+Wrapper component that renders its children only if the post can be trashed.
 
 _Parameters_
 
--   _props_ `Object`: - The component props.
--   _props.children_ `React.ReactNode`: - The child components to render.
+-   _props_ `Object`: The component props.
+-   _props.children_ `React.ReactElement`: The child components.
 
 _Returns_
 
--   `React.ReactNode`: The rendered child components or null if the post can not trashed.
+-   `React.ReactElement | null`: The rendered child components or null if the post can't be trashed.
 
 ### PostTypeSupportCheck
 
@@ -1762,7 +1763,7 @@ A user mentions completer.
 
 _Type_
 
--   `WPCompleter`
+-   `Object`
 
 ### VisualEditorGlobalKeyboardShortcuts
 
